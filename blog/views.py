@@ -31,4 +31,18 @@ def post_new(request):
 
     return render(request, 'blog/post_edit.html', {'form': form})
 
-
+def post_edit(request, pk):
+    # post_newと似てるが違う。urlsからpkパラメーターを受け取る。編集したい
+    # Postモデルをget~404(Post, pk=pk)で取得、フォームを作るときはそのポストをインスタンスとして渡す
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.published_data = timezone.now()
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'blog/post_edit.html', {'form': form})
