@@ -10,8 +10,15 @@
     </head>
     <body>
         <div class="page-header">   
+            <!--管理者のみ見えるようにする-->
             {% if user.is_authenticated %}
+                <!--草稿一覧-->
+                <a href="{% url 'post_draft_list' %}" class="top-menu"><span class="glyphicon glyphicon-edit"></span></a>               
+                <!--新規投稿-->
                 <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+                <p class="top-menu">Hello {{ user.username }} <small>(<a href="{% url 'logout' %}">Log out</a>)</small></p>
+            {% else %}
+                <a href="{% url 'login' %}" class="top-menu"><span class="glyphicon glyphicon-lock"></span></a>
             {% endif %}
             <h1><a href="/">Fuyofuyo Blog</a></h1>
         </div>
